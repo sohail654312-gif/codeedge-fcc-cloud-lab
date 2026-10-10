@@ -2,7 +2,7 @@
 
 **Purpose:** Private and standalone experiments for FCC Codex, NVIDIA NIM, alternative AI coding models, and GitHub-hosted command execution.
 
-**Status:** Bootstrap phase. AI model provider accounts, FCC installation and real model inference are not yet verified.
+**Status:** Bootstrap committed. The first GitHub Actions cloud run and its rerun failed before any runner steps; FCC installation and real model inference have **not** occurred. See [first-run evidence](docs/first-run-evidence.md).
 
 ## Scope and isolation
 - Only this repository may be used for experiments.
