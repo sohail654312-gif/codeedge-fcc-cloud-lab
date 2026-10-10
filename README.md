@@ -27,3 +27,13 @@ The workflow grants `contents: read` only, disables persisted checkout credentia
 See [testing gates](docs/testing-gates.md) and [secrets checklist](docs/secrets-checklist.md).
 
 **Important:** GitHub Actions runners are temporary. This repo is not a continuously running FCC server. Free usage is bounded by GitHub and provider quotas.
+
+## NVIDIA NIM one-shot test (owner-authorized)
+
+The [manual NVIDIA NIM workflow](.github/workflows/nvidia-one-shot.yml) runs one fixed, small test prompt using [scripts/nvidia_probe.py](scripts/nvidia_probe.py). It captures a short answer preview, provider/model, latency, finish reason and token counts where supplied. It does not run automatically.
+
+Before using it, create an NVIDIA development key using https://build.nvidia.com/settings/api-keys and enter it directly at **Settings → Secrets and variables → Actions → New repository secret** using name `NVIDIA_API_KEY` (never paste the key into ChatGPT). Then go to Actions → **NVIDIA NIM one-shot model test** → **Run workflow**.
+
+A private-repo runner must be available before this will execute. The model ID is configurable in the manual workflow. NVIDIA free access and rate limits may vary.
+
+See [FCC preliminary upstream source review](docs/fcc-upstream-review.md). No unreviewed FCC installer runs and no provider API calls have been made.
