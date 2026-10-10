@@ -1,0 +1,29 @@
+name: Cloud shell smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cloud-smoke.yml'
+      - 'scripts/smoke.sh'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lab-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout only this repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify cloud shell and available tools
+        shell: bash
+        run: bash scripts/smoke.sh
