@@ -1,0 +1,22 @@
+name: Minimal GitHub Runner Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/minimal-runner.yml'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Runner startup check (no checkout)
+        run: |
+          printf 'CODEEDGE_RUNNER_STARTED\n'
+          printf 'Runner system: '
+          uname -s
+          printf 'CODEEDGE_RUNNER_FINISHED\n'
