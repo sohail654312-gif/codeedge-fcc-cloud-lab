@@ -81,3 +81,36 @@ jobs:
           assert {"fcc-server", "fcc-codex", "fcc-doctor"} <= entries
           print("FCC entrypoint verification passed (provider not configured)")
           PY
+
+      - name: Start FCC on loopback and check HTTP health (no provider key)
+        working-directory: upstream-fcc
+        shell: bash
+        env:
+          HOST: "127.0.0.1"
+          PORT: "18082"
+          FCC_OPEN_BROWSER: "false"
+        run: |
+          set -euo pipefail
+          uv run --no-sync fcc-server > "$RUNNER_TEMP/fcc-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true; wait "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 40); do
+            if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:18082/health > "$RUNNER_TEMP/health.json" 2>/dev/null; then
+              ready=1
+              break
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then break; fi
+            sleep 0.5
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "FCC server did not pass loopback health check" >&2
+            tail -n 45 "$RUNNER_TEMP/fcc-server.log" >&2
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json, os, pathlib
+          payload = json.loads((pathlib.Path(os.environ["RUNNER_TEMP"]) / "health.json").read_text())
+          assert payload == {"status": "healthy"}, payload
+          print("FCC loopback health endpoint passed, no inference request sent")
+          PY
