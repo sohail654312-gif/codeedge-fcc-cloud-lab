@@ -18,6 +18,11 @@ All results below come from this public standalone repo: `sohail654312-gif/codee
 - All setup steps, server process startup and HTTP `/health` request passed.
 - Bound to `127.0.0.1` inside disposable GitHub-hosted runner; not exposed to the internet and no persistence after job completion.
 
+## Official Codex CLI binary — PASS
+- [Run 38116399684](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116399684): success.
+- The official pinned `@openai/codex@0.162.1` npm CLI installed and reported help/version on a temporary Linux runner; lifecycle scripts were disabled.
+- This does **not** prove an authenticated Codex coding session or FCC-Codex integration yet.
+
 ## NVIDIA probe offline safety test — PASS
 - [Run 38116337700](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116337700): success.
 - Validated missing-secret branch, a simulated successful model response, expected usage counts, and no API key disclosure in test output or HTTP failure handling.
