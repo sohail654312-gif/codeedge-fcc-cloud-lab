@@ -18,6 +18,11 @@ All results below come from this public standalone repo: `sohail654312-gif/codee
 - All setup steps, server process startup and HTTP `/health` request passed.
 - Bound to `127.0.0.1` inside disposable GitHub-hosted runner; not exposed to the internet and no persistence after job completion.
 
+## NVIDIA probe offline safety test — PASS
+- [Run 38116337700](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116337700): success.
+- Validated missing-secret branch, a simulated successful model response, expected usage counts, and no API key disclosure in test output or HTTP failure handling.
+- **No NVIDIA network/API call was performed.**
+
 ## Not yet tested
 - An actual NVIDIA NIM provider request (API key not available to this workflow).
 - A real FCC-to-Codex coding task or full agent tool cycle.
