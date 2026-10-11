@@ -1,0 +1,32 @@
+name: Codex CLI pinned binary smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/codex-cli-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  codex:
+    name: Install verified Codex CLI without login
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check node and npm
+        shell: bash
+        run: |
+          node --version
+          npm --version
+      - name: Install pinned npm Codex CLI without lifecycle scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/codex" --ignore-scripts --no-audit --no-fund --save-exact @openai/codex@0.162.1
+          "$RUNNER_TEMP/codex/node_modules/.bin/codex" --version
+          "$RUNNER_TEMP/codex/node_modules/.bin/codex" --help > "$RUNNER_TEMP/codex-help.txt"
+          grep -q 'codex' "$RUNNER_TEMP/codex-help.txt"
+          printf 'Pinned Codex CLI binary check passed. No account sign-in or AI request performed.\n'
