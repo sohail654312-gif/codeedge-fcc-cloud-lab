@@ -1,20 +1,21 @@
-# FCC upstream source review — preliminary
+# FCC upstream source review — partial, pinned
 
-This document records a **source-identity check only**. It is NOT proof that executing a third-party installer or running the app is safe.
+The reference source is [Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code), at commit `42bf8439cba25eae02a4dcb909a72227a46510a6` (observed 2026-10-10).
 
-- Candidate project: https://github.com/Alishahryar1/free-claude-code
-- Reference upstream commit observed 2026-10-10: `42bf8439cba25eae02a4dcb909a72227a46510a6`
-- `pyproject.toml` declares package name `free-claude-code`, license `AGPL-3.0-only`, and **Python exactly 3.14.7**.
-- Declared entrypoints include `fcc-server`, `fcc-doctor`, `fcc-claude` and `fcc-codex`.
-- It declares a large dependency set (FastAPI, HTTPX, OpenAI, SQLAlchemy, gRPC, NVIDIA Riva, etc.). Third-party network installation must not happen until reviewed.
-- Its README documents NVIDIA NIM via the `NVIDIA_NIM_API_KEY` setting and `fcc-codex` as a Codex launcher.
-- README/provider documentation is not a guarantee of free quotas, provider reliability, or Codex compatibility in unattended cloud use.
+## Verified source and runtime identity
+- Package `free-claude-code`, license `AGPL-3.0-only`, required Python `==3.14.7`.
+- Entry points declared: `fcc-server`, `fcc-doctor`, `fcc-codex`, and other agent launchers.
+- Large transitive dependency set; install was performed **only** in an ephemeral GitHub runner with no service secrets.
+- Installation uses pinned upstream Git checkout and `uv sync --locked`, not the moving `main` installer.
+- The documented NVIDIA config name is `NVIDIA_NIM_API_KEY`. The lab's one-shot test uses this name consistently.
+- [Installation smoke passed](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116120418); [loopback server HTTP health passed](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116193151).
 
-## Safe next audit gates
-1. Verify this upstream commit and corresponding installer checksums.
-2. Inspect `scripts/install.sh`, authentication handling, outbound connections, token redaction and telemetry.
-3. Inspect dependency lockfile and AGPL redistribution implications.
-4. Try isolated FCC installation on a **throwaway runner with no secrets**; never `curl | sh` from a moving branch.
-5. Only then test provider settings with a scoped key and low-token request.
+## Security cautions
+- Upstream `scripts/install.sh` and `install.ps1` contain optional installation paths for other tools and external download locations; the lab **does not execute them**.
+- The executable source and dependency graph have **not** undergone a full code-level security or telemetry audit. A successful boot is not a security certification.
+- AGPL-3.0 licensing should be reviewed before distribution or hosted service use.
+- A local FCC proxy is not an unattended coding agent by itself: running Codex still requires an agent installation and approved provider credentials.
+- README/provider claims do not guarantee free quotas, unlimited credits, or support for every model.
 
-Do not grant the FCC process or any coding agent credentials for the owner's other repositories.
+## Before expanding scope
+Verify provider credentials and billing guardrails; inspect outbound destinations and model prompt data; test an isolated coding task with no cross-repo access; then request owner review for deployment or credential expansion.
