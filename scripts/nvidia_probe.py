@@ -13,9 +13,9 @@ ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions"
 EXPECTED = "CODEEDGE_NIM_OK"
 
 def main() -> int:
-    api_key = os.environ.get("NVIDIA_API_KEY", "").strip()
+    api_key = os.environ.get("NVIDIA_NIM_API_KEY", "").strip()
     if not api_key:
-        print("NVIDIA_API_KEY repository secret is missing. No request sent.", file=sys.stderr)
+        print("NVIDIA_NIM_API_KEY repository secret is missing. No request sent.", file=sys.stderr)
         return 2
 
     model = os.environ.get("NVIDIA_MODEL", "nvidia/nemotron-3-super-120b-a12b").strip()
