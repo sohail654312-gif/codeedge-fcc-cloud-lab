@@ -8,7 +8,8 @@
 | 2B | Locked FCC install and CLI entrypoints on ephemeral runner | PASS |
 | 2C | Start FCC on localhost and validate HTTP health | PASS |
 | 2D | Full code/dependency security, telemetry and licensing review | NOT COMPLETE |
-| 3 | Authorized low-token NVIDIA NIM inference through secret | NOT RUN |
+| 3A | Offline NVIDIA probe and secret-redaction tests | PASS |
+| 3B | Authorized low-token NVIDIA NIM inference through secret | NOT RUN |
 | 4 | Real FCC/Codex harmless coding task scoped to this repository | NOT RUN |
 | 5 | Owner approves any production integration or spending | NOT REQUESTED |
 
