@@ -24,6 +24,6 @@ jobs:
       - name: Check one NVIDIA model response
         shell: bash
         env:
-          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_NIM_API_KEY: ${{ secrets.NVIDIA_NIM_API_KEY }}
           NVIDIA_MODEL: ${{ inputs.model }}
         run: python3 scripts/nvidia_probe.py
