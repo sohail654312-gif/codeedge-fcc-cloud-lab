@@ -1,39 +1,45 @@
 # Codeedge FCC Cloud Lab
 
-**Purpose:** Private and standalone experiments for FCC Codex, NVIDIA NIM, alternative AI coding models, and GitHub-hosted command execution.
+This is a **public, isolated testing repository** for FCC Codex, NVIDIA NIM, alternative AI models, and GitHub-hosted cloud commands. It is **not** a client app or production deployment.
 
-**Status:** Bootstrap committed. The first GitHub Actions cloud run and its rerun failed before any runner steps; FCC installation and real model inference have **not** occurred. See [first-run evidence](docs/first-run-evidence.md).
+## Verified milestones — 2026-10-11
 
-## Scope and isolation
-- Only this repository may be used for experiments.
-- Do not modify or deploy `codeedge`, `codeedge-business-os`, `codeedge-growth-starter`, or other existing Codeedge repositories.
-- Do not grant AI workflows write tokens, credentials or SSH access to other repositories.
-- Do not place credentials or tokens in source, logs, prompts, issues, artifacts or chat.
-- No external client messages, production deployments, purchases, destructive operations or financial actions without explicit owner approval.
+- ✅ [GitHub cloud runner acceptance](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38094806909) — passed
+- ✅ [Pinned FCC install, Python 3.14.7 and CLI entrypoints](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116120418) — passed
+- ✅ [FCC loopback HTTP health](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116193151) — passed
+- ⏳ NVIDIA real API call — **not yet run** (requires owner's secret)
+- ⏳ Actual FCC-to-Codex coding task — **not yet run**
 
-## Cloud-shell test
-Open **Actions → Cloud shell smoke test**. A normal push to `main` also triggers this workflow. It runs on an ephemeral GitHub-hosted Linux runner and verifies Bash, Git, Python, Node, npm and OS information.
+The FCC workflows use disposable GitHub Linux runners. They do **not** create a persistent hosted FCC server. The selected upstream commit is `42bf8439cba25eae02a4dcb909a72227a46510a6` and its dependencies are installed with a locked uv environment; no pipe-to-shell installer was used.
 
-The workflow grants `contents: read` only, disables persisted checkout credentials, has a 10-minute timeout and makes **no AI API requests or changes to other repositories**.
+## Strict project isolation
 
-## Roadmap
-1. **Gate 0 — Isolation:** Private repository, least-privilege workflows.
-2. **Gate 1 — Cloud execution:** Verify GitHub Actions run and logs.
-3. **Gate 2 — FCC source audit:** Identify and pin a reviewed upstream commit; avoid pipe-to-shell installers.
-4. **Gate 3 — Provider key:** Add `NVIDIA_API_KEY` through GitHub encrypted Actions secrets (never in chat).
-5. **Gate 4 — Real response:** Record model, provider, latency, available token usage and test outcome.
-6. **Gate 5 — Coding agent test:** Run a harmless coding task here, review diffs, and only then consider scope expansion.
+- Work only inside this repository. **Never modify** existing Codeedge MVP, Business OS, Growth Starter, website, or other repositories.
+- No cross-repository GitHub tokens, credentials, SSH access, service logins, or proprietary client assets.
+- Public code, commits, Actions logs, and artifacts must contain **no secrets**; do not upload private customer data.
+- GitHub Actions `GITHUB_TOKEN` must remain read-only unless owner separately approves a narrowly-scoped exception.
+- No external client messages, production changes, spending, public server exposure, or destructive actions without owner authorization.
 
-See [testing gates](docs/testing-gates.md) and [secrets checklist](docs/secrets-checklist.md).
+## Cloud workflows
 
-**Important:** GitHub Actions runners are temporary. This repo is not a continuously running FCC server. Free usage is bounded by GitHub and provider quotas.
+- `cloud-smoke.yml`: cloud runner and shell verification.
+- `minimal-runner.yml`: dependency-free diagnostic.
+- `fcc-pinned-install.yml`: checkout exact FCC commit, install locked dependencies, inspect entrypoints, boot server on **127.0.0.1 only**, and assert `/health`.
+- `nvidia-one-shot.yml`: **manual trigger only**, one bounded model test with `scripts/nvidia_probe.py`. Not yet executed against a real NVIDIA provider.
 
-## NVIDIA NIM one-shot test (owner-authorized)
+## One-time NVIDIA setup (owner only)
 
-The [manual NVIDIA NIM workflow](.github/workflows/nvidia-one-shot.yml) runs one fixed, small test prompt using [scripts/nvidia_probe.py](scripts/nvidia_probe.py). It captures a short answer preview, provider/model, latency, finish reason and token counts where supplied. It does not run automatically.
+1. Create an NVIDIA NIM developer API key at https://build.nvidia.com/settings/api-keys, if eligible.
+2. Add it through [this repository's Actions secrets settings](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/settings/secrets/actions), with the exact secret name **`NVIDIA_NIM_API_KEY`**. Keep the value off chat, files, and terminal output.
+3. Run [NVIDIA NIM one-shot model test](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/workflows/nvidia-one-shot.yml) from the **Actions → Run workflow** menu. Model access, credits and rate limits depend on NVIDIA and may change.
 
-Before using it, create an NVIDIA development key using https://build.nvidia.com/settings/api-keys and enter it directly at **Settings → Secrets and variables → Actions → New repository secret** using name `NVIDIA_API_KEY` (never paste the key into ChatGPT). Then go to Actions → **NVIDIA NIM one-shot model test** → **Run workflow**.
+The one-shot probe reports the model ID, short answer preview, latency, finish reason and token usage where supplied. Its output is visible publicly in GitHub Actions; never send client data as a test prompt. No claim of unlimited free inference is made.
 
-A private-repo runner must be available before this will execute. The model ID is configurable in the manual workflow. NVIDIA free access and rate limits may vary.
+## Evidence and remaining gates
 
-See [FCC preliminary upstream source review](docs/fcc-upstream-review.md). No unreviewed FCC installer runs and no provider API calls have been made.
+- [Verified execution evidence](docs/first-run-evidence.md)
+- [FCC preliminary source review](docs/fcc-upstream-review.md)
+- [Testing and approval gates](docs/testing-gates.md)
+- [Secrets and permission checklist](docs/secrets-checklist.md)
+
+**Next:** Prove an authorized real model response, then a sandbox-only FCC/Codex coding task. The platform still needs a securely supplied provider key or an appropriately authorized alternative provider connection.
