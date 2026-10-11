@@ -1,0 +1,28 @@
+name: NVIDIA provider offline probe tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/test_nvidia_probe.py'
+      - 'scripts/nvidia_probe.py'
+      - '.github/workflows/nvidia-probe-unit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Test request shape, success and redaction
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout only cloud lab
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify probe without a real API key
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
