@@ -7,6 +7,7 @@ This is a **public, isolated testing repository** for FCC Codex, NVIDIA NIM, alt
 - ✅ [GitHub cloud runner acceptance](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38094806909) — passed
 - ✅ [Pinned FCC install, Python 3.14.7 and CLI entrypoints](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116120418) — passed
 - ✅ [FCC loopback HTTP health](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116193151) — passed
+- ✅ [Offline NVIDIA request, error and key-redaction unit tests](https://github.com/sohail654312-gif/codeedge-fcc-cloud-lab/actions/runs/38116337700) — passed (no real key)
 - ⏳ NVIDIA real API call — **not yet run** (requires owner's secret)
 - ⏳ Actual FCC-to-Codex coding task — **not yet run**
 
@@ -26,6 +27,7 @@ The FCC workflows use disposable GitHub Linux runners. They do **not** create a 
 - `minimal-runner.yml`: dependency-free diagnostic.
 - `fcc-pinned-install.yml`: checkout exact FCC commit, install locked dependencies, inspect entrypoints, boot server on **127.0.0.1 only**, and assert `/health`.
 - `nvidia-one-shot.yml`: **manual trigger only**, one bounded model test with `scripts/nvidia_probe.py`. Not yet executed against a real NVIDIA provider.
+- `nvidia-probe-unit.yml`: automatic, credential-free tests covering missing key, simulated success and redacted HTTP errors.
 
 ## One-time NVIDIA setup (owner only)
 
